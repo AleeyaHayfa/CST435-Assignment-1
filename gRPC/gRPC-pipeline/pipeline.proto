@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pipeline;
+
+service Pipeline {
+        rpc Step(PipelineRequest) returns (PipelineResponse);
+}
+
+message PipelineRequest {
+        repeated int32 numbers = 1;
+        int64 cumulative_processing = 2;
+}
+
+message PipelineResponse {
+        repeated int32 numbers = 1;
+        int64 cumulative_processing = 2;
+        int64 work_time = 3;
+}
