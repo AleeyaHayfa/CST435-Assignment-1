@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package mapreduce;
+
+service MapReduce {
+        rpc Map (MapRequest) returns (MapReply);
+        rpc Reduce (ReduceRequest) returns (ReduceReply);
+}
+
+message MapRequest {
+        repeated int32 numbers = 1;
+        int64 send_timestamp_ns = 2;
+}
+
+message MapReply {
+        int32 worker_min = 1;
+        int64 rtt_ns = 2;
+        int64 processing_time_ns = 3;
+}
+
+message ReduceRequest {
+        repeated int32 worker_mins = 1;
+}
+
+message ReduceReply {
+        int32 final_min = 1;
+}
