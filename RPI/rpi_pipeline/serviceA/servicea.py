@@ -3,15 +3,25 @@ import time
 import requests
 from fastapi import FastAPI
 
+# Basic service configuration for this worker
 SERVICE_NAME = "Service A"
 PORT = 8001
+
+
+# Next service in the pipeline (passed by Docker environment variables)
 NEXT_SERVICE = os.environ.get("NEXT_SERVICE", "serviceb")
 NEXT_PORT = int(os.environ.get("NEXT_PORT", 8002))
+
+# Detect whether running inside Docker (used for hostname resolution)
 IN_DOCKER = os.environ.get("IN_DOCKER", "0") == "1"
 
 app = FastAPI()
 
 def wait_for_next_service():
+    """
+    Waits for the next service in the pipeline to be healthy before sending data.
+    It checks the /health endpoint every second for up to 60 seconds.
+    """
     if not NEXT_SERVICE or not NEXT_PORT:
         return
     host = NEXT_SERVICE if IN_DOCKER else "localhost"
@@ -49,6 +59,7 @@ def process(payload: dict):
 
     output = {"service": SERVICE_NAME, "input": input_data, "data": processed, "processing_ns": work_ns}
 
+    # If a next service exists, forward the processed output
     if NEXT_SERVICE and NEXT_PORT:
         wait_for_next_service()
         try:
@@ -64,4 +75,6 @@ def process(payload: dict):
 
 if __name__ == "__main__":
     import uvicorn
+     # Start FastAPI service on configured port
     uvicorn.run(app, host="0.0.0.0", port=PORT)
+
