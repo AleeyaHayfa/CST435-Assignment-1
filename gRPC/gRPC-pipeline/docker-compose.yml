@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  worker1:
+    build: .
+    container_name: service1
+    command: ["python3", "server.py", "1", "50051"]
+    ports:
+      - "50051:50051"
+
+  worker2:
+    build: .
+    container_name: service2
+    command: ["python3", "server.py", "2", "50052"]
+    ports:
+      - "50052:50052"
+
+  worker3:
+    build: .
+    container_name: service3
+    command: ["python3", "server.py", "3", "50053"]
+    ports:
+      - "50053:50053"
+
+  worker4:
+    build: .
+    container_name: service4
+    command: ["python3", "server.py", "4", "50054"]
+    ports:
+      - "50054:50054"
+
+  worker5:
+    build: .
+    container_name: service5
+    command: ["python3", "server.py", "5","50055"]
+    ports:
+      - "50055:50055"
+
+  client:
+    build: .
+    container_name: grpc_client
+    depends_on:
+      - worker1
+      - worker2
+      - worker3
+      - worker4
+      - worker5
+    command: ["python3", "client.py"]
