@@ -1,0 +1,55 @@
+version: '3'
+services:
+  service1:
+    build: .
+    command: python service.py
+    environment:
+      - SERVICE_NAME=Service 1
+      - PORT=8000
+      - NEXT_HOST=service2
+      - NEXT_PORT=8000
+    ports:
+      - "8001:8000"
+
+  service2:
+    build: .
+    command: python service.py
+    environment:
+      - SERVICE_NAME=Service 2
+      - PORT=8000
+      - NEXT_HOST=service3
+      - NEXT_PORT=8000
+
+  service3:
+    build: .
+    command: python service.py
+    environment:
+      - SERVICE_NAME=Service 3
+      - PORT=8000
+      - NEXT_HOST=service4
+      - NEXT_PORT=8000
+
+  service4:
+    build: .
+    command: python service.py
+    environment:
+      - SERVICE_NAME=Service 4
+      - PORT=8000
+      - NEXT_HOST=service5
+      - NEXT_PORT=8000
+
+  service5:
+    build: .
+    command: python service.py
+    environment:
+      - SERVICE_NAME=Service 5
+      - PORT=8000
+
+  client:
+    build: .
+    command: python client.py
+    environment:
+      - ENTRY_HOST=service1
+      - ENTRY_PORT=8000
+    depends_on:
+      - service1
