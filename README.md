@@ -42,7 +42,6 @@ We implemented two distinct distributed patterns utilizing 5 services and 1 clie
     1.  **Initiation:** The Client sends an unsorted list to Service 1.
     2.  **Passes 1-4 (Services 1-4):** Each service performs the next sorting pass of the Bubble Sort algorithm and forwards the partially sorted list to the next service in the chain.
     3.  **Finalization (Service 5):** Service 5 performs the final sort verification and returns the fully sorted list to the Client.
-    4.  
 ---
 
 ## 👤 Contributors
