@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  service1:
+    build: .
+    ports:
+      - "8001:8000"
+    command: python3 server.py 8000
+
+  service2:
+    build: .
+    ports:
+      - "8002:8000"
+    command: python3 server.py 8000
+
+  service3:
+    build: .
+    ports:
+      - "8003:8000"
+    command: python3 server.py 8000
+
+  service4:
+    build: .
+    ports:
+      - "8004:8000"
+    command: python3 server.py 8000
+
+  service5:
+    build: .
+    ports:
+      - "8005:8000"
+    command: python3 server.py 8000
+
+  # NEW: The Client runs automatically inside the docker network
+  client:
+    build: .
+    # This environment variable tells client.py to use "serviceX" instead of "localhost"
+    environment:
+      - DOCKER_MODE=true
+    command: python3 client.py
+    depends_on:
+      - service1
+      - service2
+      - service3
+      - service4
+      - service5
