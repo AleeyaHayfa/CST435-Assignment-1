@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  service_a:
+    build:
+      context: .
+    container_name: service_a
+    working_dir: /app/Service_A
+    environment:
+      - DOCKER=1
+      - PORT=9000
+    command: python service_a.py
+    ports:
+      - "9010:9000"
+
+  service_b:
+    build:
+      context: .
+    container_name: service_b
+    working_dir: /app/Service_B
+    environment:
+      - DOCKER=1
+      - PORT=9001
+    command: python service_b.py
+    ports:
+      - "9011:9001"
+
+  service_c:
+    build:
+      context: .
+    container_name: service_c
+    working_dir: /app/Service_C
+    environment:
+      - DOCKER=1
+      - PORT=9002
+    command: python service_c.py
+    ports:
+      - "9012:9002"
+
+  service_d:
+    build:
+      context: .
+    container_name: service_d
+    working_dir: /app/Service_D
+    environment:
+      - DOCKER=1
+      - PORT=9003
+    command: python service_d.py
+    ports:
+      - "9013:9003"
+
+  service_e:
+    build:
+      context: .
+    container_name: service_e
+    working_dir: /app/Service_E
+    environment:
+      - DOCKER=1
+      - PORT=9004
+    command: python service_e.py
+    ports:
+      - "9014:9004"
+
+  client:
+    build:
+      context: .
+    container_name: client_parallel
+    working_dir: /app/client
+    environment:
+      - DOCKER=1
+      - PYTHONPATH=/app   
+    command: python client_parallel.py
+    depends_on:
+      - service_a
+      - service_b
+      - service_c
+      - service_d
+      - service_e
