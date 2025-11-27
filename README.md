@@ -42,35 +42,7 @@ We implemented two distinct distributed patterns utilizing 5 services and 1 clie
     1.  **Initiation:** The Client sends an unsorted list to Service 1.
     2.  **Passes 1-4 (Services 1-4):** Each service performs the next sorting pass of the Bubble Sort algorithm and forwards the partially sorted list to the next service in the chain.
     3.  **Finalization (Service 5):** Service 5 performs the final sort verification and returns the fully sorted list to the Client.
-
-### Deployment Environments
-
-*   **Localhost:** Services run manually in separate Ubuntu terminals (WSL) within a shared Python virtual environment. This served as the baseline with minimal networking overhead.
-*   **Docker Desktop:** Each service is containerized and connected via Docker's internal virtual network, introducing realistic overhead from network bridging and container isolation.
-
----
-
-## 📈 Key Findings and Conclusion
-
-### Overall Architectural Insight
-
-*   **Parallelization Dominates:** The **MapReduce** parallel architecture demonstrated **superior efficiency** over the sequential **Bubble Sort pipeline**, regardless of the communication protocol used.
-*   **Synchronous Blocking:** The Bubble Sort pipeline suffered from **"Synchronous Blocking,"** where upstream services were forced into an idle wait state until the entire downstream chain completed its sequential tasks, leading to significantly higher total transaction times.
-
-### Protocol Performance (MapReduce Parallel Setup)
-
-| Protocol | Performance Trend | Optimal Use Case (Based on Study) |
-| :--- | :--- | :--- |
-| **WebSocket** | **Fastest Overall.** Achieved the lowest RTT in both Localhost and Docker. Its persistent, bidirectional connection eliminates repeated handshake overhead. | Ideal for parallel workloads with frequent, lightweight communication. |
-| **JSON-RPC** | **Strong and Stable.** Recorded the lowest transaction times overall in the parallel setup. Low overhead due to simple JSON encoding. | Excellent choice for MapReduce operations involving small payloads and rapid request-response cycles. |
-| **gRPC** | **Fastest Processing Time.** Highly efficient server-side computation. However, its structured overhead from HTTP/2 streams resulted in higher RTT than lightweight protocols. | Better suited for large data transfers and high-throughput applications, less optimal for micro-level parallel tasks. |
-| **XML-RPC** | **Moderate/Stable.** Higher RTT than JSON-RPC and WebSocket due to verbose XML parsing overhead, but remained predictable. | Stable, but less performant than modern, lightweight alternatives. |
-| **RPI (Custom)** | Acceptable on Localhost but **Severe Degradation in Docker**. RTT and transaction times spiked significantly, likely due to a combination of Docker networking overhead and hardware constraints. | Not recommended for containerized environments without significant optimization. |
-
-### Summary
-
-While protocol selection impacts individual service latency, the study confirms that the **underlying system architecture (parallel vs. sequential)** plays the dominant role in total execution speed. For scalable distributed applications, **asynchronous parallel processing combined with lightweight protocols (like JSON-RPC or WebSocket)** yields the optimal balance of speed and efficiency.
-
+    4.  
 ---
 
 ## 👤 Contributors
