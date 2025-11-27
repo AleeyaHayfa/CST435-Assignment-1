@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  worker1:
+    build: .
+    environment:
+      - SERVICE_NAME=Service 1
+      - PORT=8000
+    ports:
+      - "8001:8000"
+
+  worker2:
+    build: .
+    environment:
+      - SERVICE_NAME=Service 2
+      - PORT=8000
+    ports:
+      - "8002:8000"
+
+  worker3:
+    build: .
+    environment:
+      - SERVICE_NAME=Service 3
+      - PORT=8000
+    ports:
+      - "8003:8000"
+
+  worker4:
+    build: .
+    environment:
+      - SERVICE_NAME=Service 4
+      - PORT=8000
+    ports:
+      - "8004:8000"
+
+  worker5:
+    build: .
+    environment:
+      - SERVICE_NAME=Service 5
+      - PORT=8000
+    ports:
+      - "8005:8000"
+
+  client:
+    build: .
+    command: python client.py
+    environment:
+      # Update list to include all 5 workers
+      - WORKER_NODES=worker1:8000,worker2:8000,worker3:8000,worker4:8000,worker5:8000
+    depends_on:
+      - worker1
+      - worker2
+      - worker3
+      - worker4
+      - worker5
