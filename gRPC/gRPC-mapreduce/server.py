@@ -21,7 +21,6 @@ class MapReduceServicer(mapreduce_pb2_grpc.MapReduceServicer):
                 end_processing_ns = time.perf_counter_ns()
                 processing_time_ns = end_processing_ns - start_processing_ns
 
-
                 return mapreduce_pb2.MapReply(
                         worker_min=worker_min,
                         rtt_ns=rtt_ns,
@@ -36,7 +35,8 @@ class MapReduceServicer(mapreduce_pb2_grpc.MapReduceServicer):
 
 def serve(port):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=5))
-        mapreduce_pb2_grpc.add_MapReduceServicer_to_server(MapReduceServicer(>        server.add_insecure_port(f"[::]:{port}")
+        mapreduce_pb2_grpc.add_MapReduceServicer_to_server(MapReduceServicer(), server)
+        server.add_insecure_port(f"[::]:{port}")
         server.start()
         print(f"Server started on port {port}")
         server.wait_for_termination()
